@@ -140,8 +140,8 @@ public class Game
     {
         var result = GetRoundResult(greenCard, redCard);
 
-        greenHand ^= (int)greenCard;
-        redHand ^= (int)redCard;
+        greenHand &= fullHand - (int)greenCard;
+        redHand &= fullHand - (int)redCard;
 
         cardPosition += result;
         if (cardPosition == 2)
@@ -239,8 +239,8 @@ public class Game
             
             if (input.Length == 2 && int.TryParse(input, out int play))
             {
-                Card greenCard = (Card)(play / 10);
-                Card redCard = (Card)(play % 10);
+                Card greenCard = (Card)MathF.Pow(2, play / 10);
+                Card redCard = (Card)MathF.Pow(2, play % 10);
                 game.MakeRound(greenCard, redCard);
                 continue;
             }
