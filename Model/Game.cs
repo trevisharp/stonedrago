@@ -1,5 +1,4 @@
 using System;
-using System.Security.Cryptography;
 
 namespace Stonedrago.Model;
 
@@ -18,6 +17,7 @@ public class Game
     private byte redPoints = 0;
     private byte singleDragonRemaining = 3;
     private byte doubleDragonReamining = 2;
+    private byte dragonReamining = 5;
     private byte currentDragon = 0;
     private int cardPosition = 0;
     
@@ -25,6 +25,47 @@ public class Game
     /// Get the current dragon in the table.
     /// </summary>
     public Dragon Current => (Dragon)currentDragon;
+
+    public bool Finished => dragonReamining == 0; 
+
+    public Player Winner =>
+        (greenPoints, redPoints) switch
+        {
+            (>3, >3) => Player.None,
+            (>3, _) => Player.Green,
+            (_, >3) => Player.Red,
+            _ => Player.None
+        };
+
+    /// <summary>
+    /// Get the green player points.
+    /// </summary>
+    public int GreenPoints => greenPoints;
+
+    /// <summary>
+    /// Get the red player points.
+    /// </summary>
+    public int RedPoints => redPoints;
+
+    /// <summary>
+    /// Get the position of Dragon.
+    /// 1 = Green player is winning the dragon card.
+    /// 0 = The battle for the draw is a tie.
+    /// -1 = Red player is winning the dragom card.
+    /// </summary>
+    public int DragonPoints => cardPosition;
+
+    /// <summary>
+    /// Returns true if green player has a specific card.
+    /// </summary>
+    public bool GreenHas(Card card)
+        => (greenHand & (int)card) > 0;
+
+    /// <summary>
+    /// Returns true if red player has a specific card.
+    /// </summary>
+    public bool RedHas(Card card)
+        => (redHand & (int)card) > 0;
 
     /// <summary>
     /// Place a dragon card in center of table.
@@ -53,6 +94,7 @@ public class Game
             singleDragonRemaining--;
         else if (currentDragon == 2)
             doubleDragonReamining--;
+        dragonReamining--;
         currentDragon = 0;
     }
 
@@ -62,13 +104,11 @@ public class Game
     /// </summary>
     public void PlaceRandomDragon()
     {
-        int totalOptions = 
-            singleDragonRemaining + doubleDragonReamining;
-        if (totalOptions == 0)
+        if (dragonReamining == 0)
             return;
         
         int selectedOption =
-            Random.Shared.Next(totalOptions);
+            Random.Shared.Next(dragonReamining);
         
         currentDragon = 
             selectedOption < singleDragonRemaining ? 
