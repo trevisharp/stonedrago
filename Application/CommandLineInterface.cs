@@ -130,7 +130,10 @@ public class CommandLineInterface
     public void Expand(int depth)
     {
         if (game is null)
+        {
             game = new Game();
+            game.PlaceRandomDragon();
+        }
 
         if (ai is null)
         {
@@ -139,6 +142,15 @@ public class CommandLineInterface
         }
 
         ai.Expand(depth);
+    }
+
+    public void Play(int quantity = 1)
+    {
+        for (int i = 0; i < quantity; i++)
+        {
+            ai.PlayBest();
+            game = ai.Root.Game;
+        }
     }
 
     private string[] getData(string command)

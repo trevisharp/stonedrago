@@ -13,6 +13,7 @@ public interface IMiniMax
     void Load(string file);
     void Save(string file);
 
+    GameNode Root { get; }
     float RootAvaliation { get; }
     IEnumerable<Game> GetPlays { get; }
 

@@ -39,7 +39,7 @@ public class Expectiminimax : IMiniMax
             float avaliation = float.NegativeInfinity;
             foreach (var child in node.Children)
             {
-                var value = expectiminimax(node, depth - 1, alfa, beta);
+                var value = expectiminimax(child, depth - 1, alfa, beta);
                 if (value > avaliation)
                     avaliation = value;
                 
@@ -58,15 +58,14 @@ public class Expectiminimax : IMiniMax
             float avaliation = float.PositiveInfinity;
             foreach (var child in node.Children)
             {
-                var value = expectiminimax(node, depth - 1, alfa, beta);
-                if (value < avaliation)
-                    avaliation = value;
+                avaliation = float.Min(
+                    avaliation, expectiminimax(child, depth - 1, alfa, beta)
+                );
                 
                 if (avaliation < alfa)
                     break;
                 
-                if (avaliation < beta)
-                    beta = avaliation;
+                beta = float.Min(beta, avaliation);
             }
             node.Avaliation = avaliation;
             return avaliation;
