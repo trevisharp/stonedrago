@@ -50,6 +50,16 @@ public class Game
     public int RedPoints => redPoints;
 
     /// <summary>
+    /// Get the green player hand data.
+    /// </summary>
+    public int GreenHand => greenHand;
+
+    /// <summary>
+    /// Get the red player hand data.
+    /// </summary>
+    public int RedHand => redHand;
+
+    /// <summary>
     /// Get the position of Dragon.
     /// 1 = Green player is winning the dragon card.
     /// 0 = The battle for the draw is a tie.
