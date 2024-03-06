@@ -58,6 +58,9 @@ public class Game
     /// Get the red player hand data.
     /// </summary>
     public int RedHand => redHand;
+    
+    public byte SingleDragonRemaining => singleDragonRemaining;
+    public byte DoubleDragonReamining => doubleDragonReamining;
 
     /// <summary>
     /// Get the position of Dragon.
@@ -159,7 +162,6 @@ public class Game
             GreenWin();
             ResetCardPosition();
             RemoveDragon();
-            PlaceRandomDragon();
         }
 
         if (cardPosition == -2)
@@ -167,7 +169,6 @@ public class Game
             RedWin();
             ResetCardPosition();
             RemoveDragon();
-            PlaceRandomDragon();
         }
 
         if (greenCard == 0 || redCard == 0)

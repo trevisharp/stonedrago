@@ -6,12 +6,14 @@ using static System.Console;
 
 namespace Stonedrago.Application;
 
+using AI;
 using Model;
 
 public class CommandLineInterface
 {
     private string command = string.Empty;
     private Game game = null;
+    private IMiniMax ai = null;
 
     public void Start()
     {
@@ -123,6 +125,20 @@ public class CommandLineInterface
     {
         ForegroundColor = ConsoleColor.Magenta;
         WriteLine(game?.ToString() ?? "Empty Game.");
+    }
+
+    public void Expand(int depth)
+    {
+        if (game is null)
+            game = new Game();
+
+        if (ai is null)
+        {
+            ai = new Expectiminimax();
+            ai.Load(game, new DefaultAvaliator());
+        }
+
+        ai.Expand(depth);
     }
 
     private string[] getData(string command)
