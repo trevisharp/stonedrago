@@ -2,6 +2,8 @@ using System;
 
 namespace Stonedrago.Model;
 
+using Exceptions;
+
 public class Game
 {
     /// <summary>
@@ -185,5 +187,67 @@ public class Game
             (Card.Priest, _) or (_, Card.Priest) => greenCard < redCard,
             _ => greenCard > redCard
         } ? 1 : -1;
+    }
+
+    /// <summary>
+    /// Create a copy of this state.
+    /// </summary>
+    public Game Clone() =>
+        new Game {
+            greenHand = greenHand,
+            redHand = redHand,
+            greenPoints = greenPoints,
+            redPoints = redPoints,
+            singleDragonRemaining = singleDragonRemaining,
+            doubleDragonReamining = doubleDragonReamining,
+            dragonReamining = dragonReamining,
+            currentDragon = currentDragon,
+            cardPosition = cardPosition
+        };
+
+    public override string ToString() =>
+    $"""
+        Player Name (points): 01234566X
+        Green Player ({greenPoints}): {Convert.ToString(greenHand, 2)}
+        Red Player ({redPoints}): {Convert.ToString(redHand, 2)}
+        Current Dragon: {currentDragon} [{cardPosition}]
+        Dragon Deck: {singleDragonRemaining}/3  {doubleDragonReamining}/2
+    """;
+
+    /// <summary>
+    /// Load a game from a Portable Game Notation string.
+    /// </summary>
+    public static Game FromPGN(string pgn)
+    {
+        Game game = new();
+        if (string.IsNullOrEmpty(pgn))
+            return game;
+
+        var commands = pgn.Split(" ");
+        
+        foreach (var command in commands)
+        {
+            var input = command.Trim();
+            if (string.IsNullOrEmpty(input))
+                continue;
+            
+            if (input.Length == 1 && int.TryParse(input, out int dragon))
+            {
+                game.PlaceDragon((Dragon)dragon);
+                continue;
+            }
+            
+            if (input.Length == 2 && int.TryParse(input, out int play))
+            {
+                Card greenCard = (Card)(play / 10);
+                Card redCard = (Card)(play % 10);
+                game.MakeRound(greenCard, redCard);
+                continue;
+            }
+
+            throw new InvalidPGNException(input);
+        }
+
+        return game;
     }
 }
