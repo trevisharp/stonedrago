@@ -1,10 +1,9 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Stonedrago.AI;
 
-using System.Linq;
-using System.Runtime.InteropServices;
 using Model;
 
 public class Expectiminimax : IMiniMax
